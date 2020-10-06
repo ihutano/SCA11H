@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+from SCA11H.commands import *
+
+# Default AP password: 24681012
+# AP host = '192.168.253.1'
+
+
+def main():
+    host = '192.168.0.62'
+    print(system.SetHTTPPassword(old_password='admin', new_password='omgwtf', host=host).run())
+    # print(system.GetNetworkSettings(host=host).run())
+
+
+if __name__ == '__main__':
+    main()
