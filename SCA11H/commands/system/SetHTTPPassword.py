@@ -1,4 +1,4 @@
-from SCA11H.commands.base.PostCommand import PostCommand, PostResult
+from SCA11H.commands.base.PostCommand import PostCommand
 import json
 import sys
 
@@ -18,6 +18,3 @@ class SetHTTPPassword(PostCommand):
             raise Exception('Maximal new password length is 32 bytes')
 
         print("WARNING: SetHTTPPassword didn't work upon testing and always returned -1", file=sys.stderr)
-
-    def run(self, **kwargs) -> PostResult:
-        return super().run()

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from SCA11H.commands.base.PostCommand import PostCommand, PostResult
+from SCA11H.commands.base.PostCommand import PostCommand
 from SCA11H.commands.system.NetworkSecurityType import NetworkSecurityType
 
 import json
@@ -55,6 +55,3 @@ class SetNetworkSettings(PostCommand):
 
     def __init__(self, settings: StationSettings, **kwargs):
         super().__init__(endpoint='/sys/network', payload=settings.to_json_string(), **kwargs)
-
-    def run(self, **kwargs) -> PostResult:
-        return super().run()

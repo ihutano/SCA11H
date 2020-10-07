@@ -7,8 +7,7 @@ from SCA11H.commands import *
 
 def main():
     host = '192.168.0.62'
-    print(system.SetHTTPPassword(old_password='admin', new_password='omgwtf', host=host).run())
-    # print(system.GetNetworkSettings(host=host).run())
+    print(system.SetWiFiCountryCode(country=WiFiCountryCode.Europe, host=host).run())
 
 
 if __name__ == '__main__':
