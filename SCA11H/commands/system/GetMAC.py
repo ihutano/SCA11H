@@ -9,3 +9,11 @@ class GetMAC(GetCommand):
 
     def run(self, **kwargs) -> str:
         return super().run()['mac']
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-mac'
+
+    @staticmethod
+    def get_help():
+        return 'Query Device MAC Address'

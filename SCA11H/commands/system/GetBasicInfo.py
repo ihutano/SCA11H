@@ -24,3 +24,11 @@ class GetBasicInfo(GetCommand):
 
     def run(self, **kwargs) -> SystemInfo:
         return SystemInfo(payload=super().run())
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-basic-info'
+
+    @staticmethod
+    def get_help():
+        return 'Query Basic System Info'

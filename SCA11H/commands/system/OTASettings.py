@@ -5,6 +5,9 @@ from typing import Optional
 class OTASettings:
     def __init__(self, enable_auto_upgrade: bool, ota_server_url: str, username: str,
                  new_password: Optional[str] = None):
+        if enable_auto_upgrade and (ota_server_url is None or username is None or new_password is None):
+            raise Exception('OTA Settings are missing')
+
         if len(ota_server_url.encode('ascii')) > 128:
             raise Exception('Maximal URL length is 128 bytes')
 

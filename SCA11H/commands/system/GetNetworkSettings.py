@@ -1,11 +1,12 @@
 from SCA11H.commands.base.GetCommand import GetCommand
 from SCA11H.commands.system.NetworkSecurityType import NetworkSecurityType
+from SCA11H.commands.base import enum_from_value
 
 
 class SettingsEntry:
     def __init__(self, payload):
         self.ssid = payload['ssid']
-        self.security = NetworkSecurityType.from_string(payload['security'])
+        self.security = enum_from_value(NetworkSecurityType, payload['security'])
         self.password = payload['passphrase']
         self.channel = payload.get('channel', 11)
         self.dhcp_client_enabled = payload.get('dhcp', None)
@@ -64,3 +65,11 @@ class GetNetworkSettings(GetCommand):
 
     def run(self, **kwargs) -> SettingsBundle:
         return SettingsBundle(payload=super().run())
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-net-settings'
+
+    @staticmethod
+    def get_help():
+        return 'Query Network Settings'

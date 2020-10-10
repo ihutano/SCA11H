@@ -1,5 +1,6 @@
 from SCA11H.commands.base.GetCommand import GetCommand
 from SCA11H.commands.system.NetworkSecurityType import NetworkSecurityType
+from SCA11H.commands.base import enum_from_value
 from typing import List
 import json
 
@@ -8,7 +9,7 @@ class NetworkInfo:
     def __init__(self, payload):
         self.ssid = payload[0]
         self.bssid = payload[1]
-        self.security = NetworkSecurityType.from_string(payload[2])
+        self.security = enum_from_value(NetworkSecurityType, payload[2])
         self.channel = payload[3]
         self.signal_strength = payload[4]
 
@@ -35,3 +36,11 @@ class ScanNetworks(GetCommand):
     def run(self, **kwargs) -> List[NetworkInfo]:
         res = super().run()
         return [NetworkInfo(payload=x) for x in res['networks']]
+
+    @staticmethod
+    def get_parser_name():
+        return 'scan-networks'
+
+    @staticmethod
+    def get_help():
+        return 'Scan networks results'

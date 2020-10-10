@@ -2,6 +2,7 @@ from typing import Optional
 
 from SCA11H.commands.base.PostCommand import PostCommand
 from SCA11H.commands.system.NetworkSecurityType import NetworkSecurityType
+from SCA11H.commands.base import enum_from_value
 
 import json
 
@@ -51,7 +52,37 @@ class StationSettings:
 
 
 class SetNetworkSettings(PostCommand):
-    """ Query Network Settings """
+    """ Configure Network Settings """
 
     def __init__(self, settings: StationSettings, **kwargs):
         super().__init__(endpoint='/sys/network', payload=settings.to_json_string(), **kwargs)
+
+    @staticmethod
+    def get_parser_name():
+        return 'set-net-settings'
+
+    @staticmethod
+    def get_help():
+        return 'Configure Network Settings'
+
+    @staticmethod
+    def add_arguments(parser):
+        parser.add_argument('--ssid', required=True, help='Wireless network SSID')
+        parser.add_argument('--security', required=True, choices=[x.value for x in NetworkSecurityType],
+                            help='Wireless network SSID')
+        parser.add_argument('--password', required=True, help='The passphrase of the secure wireless network')
+        parser.add_argument('--with-dhcp', type=bool, required=True, help='Enable DHCP client')
+        parser.add_argument('--ip', help='Static IP address')
+        parser.add_argument('--netmask', help='Static Subnet mask')
+        parser.add_argument('--gateway', help='Static Gateway address')
+        parser.add_argument('--primary-dns', help='Static Primary DNS server address')
+        parser.add_argument('--secondary-dns', help='Static Secondary DNS server address')
+
+    @staticmethod
+    def parse_arguments(args) -> dict:
+        return {
+            'settings': StationSettings(ssid=args.ssid, security=enum_from_value(NetworkSecurityType, args.security),
+                                        dhcp_client_enabled=args.with_dhcp, password=args.password, static_ip=args.ip,
+                                        static_netmask=args.netmask, static_gateway=args.gateway,
+                                        static_dns_1=args.primary_dns, static_dns_2=args.secondary_dns)
+        }

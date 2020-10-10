@@ -26,3 +26,5 @@ class UpgradeFirmware(PostCommand):
             res = PostResult(payload={'error': -1})
 
         return res
+
+    # TODO: Add command-line support

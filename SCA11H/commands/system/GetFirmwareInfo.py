@@ -27,3 +27,11 @@ class GetFirmwareInfo(GetCommand):
 
     def run(self, **kwargs) -> FirmwareVersions:
         return FirmwareVersions(payload=super().run())
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-firmware-info'
+
+    @staticmethod
+    def get_help():
+        return 'Query All Firmware Info'

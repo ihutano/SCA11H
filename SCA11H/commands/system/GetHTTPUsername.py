@@ -11,3 +11,11 @@ class GetHTTPUsername(GetCommand):
 
     def run(self, **kwargs) -> str:
         return super().run()['username']
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-username'
+
+    @staticmethod
+    def get_help():
+        return 'Query Authentication Account (Username to access HTTP API)'

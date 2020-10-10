@@ -2,18 +2,12 @@ import json
 from enum import Enum
 from typing import Optional
 
+from SCA11H.commands.base import enum_from_value
+
 
 class CommunicationMode(Enum):
     Cloud = 1
     Local = 0
-
-    @staticmethod
-    def from_int(value: int):
-        for t in CommunicationMode:
-            if t.value == value:
-                return t
-
-        raise Exception('Unexpected communication mode: %d' % value)
 
 
 class CommunicationSettings:
@@ -41,7 +35,7 @@ class CommunicationSettings:
 
     @staticmethod
     def from_payload(payload):
-        return CommunicationSettings(mode=CommunicationMode.from_int(payload['mode']),
+        return CommunicationSettings(mode=enum_from_value(CommunicationMode, payload['mode']),
                                      enable_https=payload['https_enable'], server_url=payload['url'],
                                      username=payload['username'], report_interval=payload['report_interval'],
                                      network_id=payload['network_id'], node_id=payload['node_id'],

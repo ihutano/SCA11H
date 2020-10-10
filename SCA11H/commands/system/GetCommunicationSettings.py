@@ -10,3 +10,11 @@ class GetCommunicationSettings(GetCommand):
 
     def run(self, **kwargs) -> CommunicationSettings:
         return CommunicationSettings.from_payload(payload=super().run())
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-comm-settings'
+
+    @staticmethod
+    def get_help():
+        return 'Query Communication Settings'

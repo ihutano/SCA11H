@@ -10,3 +10,11 @@ class GetOTASettings(GetCommand):
 
     def run(self, **kwargs) -> OTASettings:
         return OTASettings.from_payload(payload=super().run())
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-ota-settings'
+
+    @staticmethod
+    def get_help():
+        return 'Query OTA Settings'

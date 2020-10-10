@@ -9,3 +9,11 @@ class GetSignalStrength(GetCommand):
 
     def run(self, **kwargs) -> int:
         return int(super().run()['rssi'])
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-rssi'
+
+    @staticmethod
+    def get_help():
+        return 'Query Network RSSI (Signal Strength, dBm)'

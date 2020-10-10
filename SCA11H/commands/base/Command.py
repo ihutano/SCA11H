@@ -3,6 +3,7 @@ from typing import Dict, Optional, Union, List
 from base64 import b64encode
 from http.client import HTTPConnection
 import json
+import argparse
 
 
 class Method(Enum):
@@ -42,3 +43,19 @@ class Command:
         connection.request(method=method.value, url=endpoint, headers=self.get_headers(), body=payload)
         res = connection.getresponse()
         return res.read().decode('utf8')
+
+    @staticmethod
+    def get_parser_name():
+        return None
+
+    @staticmethod
+    def get_help():
+        return None
+
+    @staticmethod
+    def add_arguments(parser: argparse.ArgumentParser):
+        pass
+
+    @staticmethod
+    def parse_arguments(args) -> dict:
+        return {}

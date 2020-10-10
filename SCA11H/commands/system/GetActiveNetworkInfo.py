@@ -2,6 +2,7 @@ from enum import Enum
 
 from SCA11H.commands.base.GetCommand import GetCommand
 from SCA11H.commands.system.NetworkSecurityType import NetworkSecurityType
+from SCA11H.commands.base import enum_from_value
 
 
 class NetworkType(Enum):
@@ -14,7 +15,7 @@ class ActiveNetworkInfo:
         print(payload)
         self.network_type = network_type
         self.ssid = payload['ssid']
-        self.security = NetworkSecurityType.from_string(payload['security'])
+        self.security = enum_from_value(NetworkSecurityType, payload['security'])
         self.password = payload.get('passphrase', None)
         self.channel = payload.get('channel', 11)
         self.dhcp_client_enabled = payload.get('dhcp', None)
@@ -66,3 +67,11 @@ class GetActiveNetworkInfo(GetCommand):
                 return ActiveNetworkInfo(network_type=nt, payload=res[nt.value])
 
         raise Exception('Could not find active network information entry')
+
+    @staticmethod
+    def get_parser_name():
+        return 'get-net-info'
+
+    @staticmethod
+    def get_help():
+        return 'Query Current Network Info'
