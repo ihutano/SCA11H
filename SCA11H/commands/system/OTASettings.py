@@ -27,17 +27,20 @@ class OTASettings:
         return OTASettings(enable_auto_upgrade=payload['autoupd'] == 1, ota_server_url=payload['url'],
                            username=payload['username'])
 
-    def __str__(self):
-        res = {
-            'enable_auto_upgrade': self.enable_auto_upgrade,
-            'ota_server_url': self.ota_server_url,
-            'username': self.username,
-        }
+    def as_list(self):
+        res = [
+            'Auto Update:    %s' % ('On ' if self.enable_auto_upgrade else 'Off'),
+            'OTA Server URL: %s' % (self.ota_server_url if self.ota_server_url is not None and len(self.ota_server_url) > 0 else 'None'),
+            'Username:       %s' % (self.username if self.username is not None and len(self.username) > 0 else 'None'),
+        ]
 
         if self.new_password is not None:
-            res['new_password'] = self.new_password
+            res.append('New Password:   %s' % self.new_password)
 
-        return json.dumps(res)
+        return res
+
+    def __str__(self):
+        return '\n'.join(self.as_list())
 
     def to_payload(self):
         res = {

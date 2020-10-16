@@ -1,5 +1,3 @@
-import json
-
 from SCA11H.commands.base.GetCommand import GetCommand
 
 
@@ -16,7 +14,20 @@ class FirmwareVersions:
         self.ota_recovery_firmware_version = payload['ota_ver']
 
     def __str__(self):
-        return json.dumps(self.__dict__)
+        return '\n'.join(self.as_list())
+
+    def as_list(self):
+        return [
+            'FS Version:   %s' % self.file_system_version,
+            'BFS Version:  %s' % self.backup_file_system_version,
+            'FW Version:   %s' % self.main_firmware_version,
+            'BFW Version:  %s' % self.backup_main_firmware_version,
+            'DCT Version:  %s' % self.device_configuration_table_version,
+            'BDCT Version: %s' % self.backup_device_configuration_table_version,
+            'WLAN Version: %s' % self.wlan_firmware_version,
+            'Boot Version: %s' % self.bootloader_firmware_version,
+            'OTA Version:  %s' % self.ota_recovery_firmware_version
+        ]
 
 
 class GetFirmwareInfo(GetCommand):
@@ -30,7 +41,7 @@ class GetFirmwareInfo(GetCommand):
 
     @staticmethod
     def get_parser_name():
-        return 'get-firmware-info'
+        return 'get-sys-firmware-info'
 
     @staticmethod
     def get_help():

@@ -18,30 +18,30 @@ class SettingsEntry:
         self.static_dns_2 = payload.get('ipdns2', None)
 
     def __str__(self):
-        result = {
-            'ssid': self.ssid,
-            'security': self.security.value,
-            'password': self.password,
-            'channel': self.channel,
-        }
+        return '\n'.join(self.as_list())
 
-        def add_field(name, value):
-            if value is not None:
-                nonlocal result
-                result[name] = value
+    def as_list(self):
+        res = [
+            'SSID:           %s' % self.ssid,
+            'Security:       %s' % self.security.value,
+            'Password:       %s' % self.password,
+            'Channel:        %s' % self.channel,
+        ]
 
-        add_field('dhcp_client_enabled', self.dhcp_client_enabled)
-        add_field('dhcp_server_enabled', self.dhcp_server_enabled)
-        add_field('static_ip', self.static_ip)
-        add_field('static_netmask', self.static_netmask)
-        add_field('static_gateway', self.static_gateway)
-        add_field('static_dns_1', self.static_dns_1)
-        add_field('static_dns_2', self.static_dns_2)
+        def add_field(fmt, value_test, value_text=None):
+            if value_test is not None:
+                nonlocal res
+                res.append(fmt % (value_text if value_text is not None else value_test))
 
-        return '%s' % result
+        add_field('DHCP Client:    %s', self.dhcp_client_enabled, 'On' if self.dhcp_client_enabled else 'Off')
+        add_field('DHCP Server:    %s', self.dhcp_server_enabled, 'On' if self.dhcp_server_enabled else 'Off')
+        add_field('Static IP:      %s', self.static_ip)
+        add_field('Static Netmask: %s', self.static_netmask)
+        add_field('Static Gateway: %s', self.static_gateway)
+        add_field('Static DNS #1:  %s', self.static_dns_1)
+        add_field('Static DNS #2:  %s', self.static_dns_2)
 
-    def __repr__(self):
-        return '%s' % self.__str__()
+        return res
 
 
 class SettingsBundle:
@@ -49,12 +49,16 @@ class SettingsBundle:
         self.soft_ap = SettingsEntry(payload=payload['ap'])
         self.station = SettingsEntry(payload=payload['sta'])
 
+    def as_list(self):
+        return [
+            'Soft AP:',
+            '\n'.join('   %s' % x for x in self.soft_ap.as_list()),
+            'Station:',
+            '\n'.join('   %s' % x for x in self.station.as_list()),
+        ]
+
     def __str__(self):
-        res = {
-            'soft_ap': self.soft_ap,
-            'station': self.station
-        }
-        return '%s' % res
+        return '\n'.join(self.as_list())
 
 
 class GetNetworkSettings(GetCommand):

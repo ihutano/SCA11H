@@ -12,7 +12,6 @@ class NetworkType(Enum):
 
 class ActiveNetworkInfo:
     def __init__(self, network_type: NetworkType, payload):
-        print(payload)
         self.network_type = network_type
         self.ssid = payload['ssid']
         self.security = enum_from_value(NetworkSecurityType, payload['security'])
@@ -27,31 +26,30 @@ class ActiveNetworkInfo:
         self.dns_2 = payload.get('ipdns2', None)
 
     def __str__(self):
-        result = {
-            'ssid': self.ssid,
-            'security': self.security.value,
-            'channel': self.channel,
-            'type': self.network_type.value,
-        }
+        return '\n'.join(self.as_list())
 
-        def add_field(name, value):
-            if value is not None:
-                nonlocal result
-                result[name] = value
+    def as_list(self):
+        res = [
+            'Type:        %s' % self.network_type.name,
+            'SSID:        %s' % self.ssid,
+            'Security:    %s' % self.security.value,
+            'Channel:     %s' % self.channel,
+        ]
 
-        add_field('password', self.password)
-        add_field('dhcp_client_enabled', self.dhcp_client_enabled)
-        add_field('dhcp_server_enabled', self.dhcp_server_enabled)
-        add_field('ip', self.ip)
-        add_field('netmask', self.netmask)
-        add_field('gateway', self.gateway)
-        add_field('dns_1', self.dns_1)
-        add_field('dns_2', self.dns_2)
+        def add_field(fmt, value_test, value_text=None):
+            if value_test is not None:
+                nonlocal res
+                res.append(fmt % (value_text if value_text is not None else value_test))
 
-        return '%s' % result
-
-    def __repr__(self):
-        return '%s' % self.__str__()
+        add_field('Password:    %s', self.password)
+        add_field('DHCP Client: %s', self.dhcp_client_enabled, 'On' if self.dhcp_client_enabled else 'Off')
+        add_field('DHCP Server: %s', self.dhcp_server_enabled, 'On' if self.dhcp_server_enabled else 'Off')
+        add_field('IP Address:  %s', self.ip)
+        add_field('Subnet Mask: %s', self.netmask)
+        add_field('Gateway:     %s', self.gateway)
+        add_field('DNS #1:      %s', self.dns_1)
+        add_field('DNS #2:      %s', self.dns_2)
+        return res
 
 
 class GetActiveNetworkInfo(GetCommand):

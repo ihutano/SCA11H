@@ -1,4 +1,3 @@
-import json
 from enum import Enum
 from typing import Optional
 
@@ -41,23 +40,25 @@ class CommunicationSettings:
                                      network_id=payload['network_id'], node_id=payload['node_id'],
                                      reset_interval=payload['reset_interval'])
 
-    def __str__(self):
-        res = {
-            'mode': self.mode.value,
-        }
+    def as_list(self):
+        res = [
+            'Mode:            %s' % self.mode.name,
+        ]
 
-        def add_field(name, field):
-            if field is not None:
+        def add_field(fmt, value_test, value_text=None):
+            if value_test is not None:
                 nonlocal res
-                res[name] = field
+                res.append(fmt % (value_text if value_text is not None else value_test))
 
-        add_field('https_enable', self.enable_https)
-        add_field('url', self.server_url)
-        add_field('username', self.username)
-        add_field('new_password', self.new_password)
-        add_field('report_interval', self.report_interval)
-        add_field('network_id', self.network_id)
-        add_field('node_id', self.node_id)
-        add_field('reset_interval', self.reset_interval)
+        add_field('HTTPS:           %s', self.enable_https, 'On' if self.enable_https else 'Off')
+        add_field('Cloud URL:       %s', self.server_url)
+        add_field('Cloud Username:  %s', self.username)
+        add_field('Cloud Password:  %s', self.new_password)
+        add_field('Report Interval: %s', self.report_interval)
+        add_field('Network Group:   %s', self.network_id)
+        add_field('Node Identifier: %s', self.node_id)
+        add_field('Reset Interval:  %s', self.reset_interval)
+        return res
 
-        return json.dumps(res)
+    def __str__(self):
+        return '\n'.join(self.as_list())
