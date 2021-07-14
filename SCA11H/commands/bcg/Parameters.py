@@ -1,19 +1,19 @@
-import json
+from SCA11H import get_argument_name
 
 
 class Parameters:
     def __init__(self, signal_high: int, signal_low: int, min_amplitude: int, tentative_stroke_vol: int,
                  typ_amplitude: int, scale: int):
-        def check(val, name, low, high):
+        def check(val, low, high):
             if val < low or val > high:
-                raise Exception('%s=%s out of range [%s, %s]' % (name, val, low, high))
+                raise Exception('%s=%s is out of range [%s, %s]' % (get_argument_name(val), val, low, high))
 
-        check(signal_high, 'signal_high', 1000, 30000)
-        check(signal_low, 'signal_low', 100, 10000)
-        check(min_amplitude, 'min_amplitude', 500, 20000)
-        check(tentative_stroke_vol, 'tentative_stroke_vol', 0, 20000)
-        check(typ_amplitude, 'typ_amplitude', 100, 10000)
-        check(scale, 'scale', 2, 15)
+        check(signal_high, 1000, 30000)
+        check(signal_low, 100, 10000)
+        check(min_amplitude, 500, 20000)
+        check(tentative_stroke_vol, 0, 20000)
+        check(typ_amplitude, 100, 10000)
+        check(scale, 2, 15)
 
         self.signal_high = signal_high
         self.signal_low = signal_low

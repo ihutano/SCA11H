@@ -4,7 +4,6 @@ from SCA11H.commands.bcg.Direction import Direction
 from SCA11H.commands.bcg.Parameters import Parameters
 from SCA11H.commands.base import enum_from_value
 from typing import Dict
-import json
 
 
 class BCGInfo:
